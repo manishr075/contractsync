@@ -152,16 +152,10 @@ export class FrontendSyncEngine {
    */
   public runCompiler(): { success: boolean; output: string } {
     try {
-      // Find tsc or execute npx tsc
-      const nodePath = 'C:\\Users\\manis\\.tools\\node';
-      const env = {
-        ...process.env,
-        PATH: `${nodePath};${process.env.PATH || ''}`
-      };
-
-      const stdout = execSync('npx tsc --noEmit', {
+      const cmd = process.platform === 'win32' ? 'npx.cmd tsc --noEmit' : 'npx tsc --noEmit';
+      const stdout = execSync(cmd, {
         cwd: this.workspaceDir,
-        env,
+        env: process.env,
         encoding: 'utf8',
         stdio: ['pipe', 'pipe', 'pipe']
       });

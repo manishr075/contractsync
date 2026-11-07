@@ -58,15 +58,17 @@ export class AntigravityAcpClient {
   }
 
   private resolveAgyPath(): string {
-    // Check known winget installation path
-    const wingetPath = path.resolve(
-      process.env.LOCALAPPDATA || 'C:\\Users\\manis\\AppData\\Local',
-      'Microsoft/WinGet/Packages/Google.AntigravityCLI_Microsoft.Winget.Source_8wekyb3d8bbwe/agy.exe'
-    );
-    if (fs.existsSync(wingetPath)) {
-      return wingetPath;
+    const paths = [
+      path.resolve(process.env.LOCALAPPDATA || 'C:\\Users\\manis\\AppData\\Local', 'agy/bin/agy.exe'),
+      path.resolve(process.env.LOCALAPPDATA || 'C:\\Users\\manis\\AppData\\Local', 'Microsoft/WinGet/Packages/Google.AntigravityCLI_Microsoft.Winget.Source_8wekyb3d8bbwe/agy.exe'),
+      'C:\\Users\\manis\\AppData\\Local\\agy\\bin\\agy.exe'
+    ];
+    for (const p of paths) {
+      if (fs.existsSync(p)) {
+        return p;
+      }
     }
-    return 'agy';
+    return 'agy.exe';
   }
 
   public async start(): Promise<string> {

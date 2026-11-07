@@ -14,28 +14,29 @@
 
 ---
 
-## 1. Verified System State: Tested vs Unverified Setup
+## 1. Verified System State: Tested vs Operational Setup
 
-To maintain strict technical honesty and hackathon compliance, here is the exact verification boundary of the project:
+To maintain strict technical honesty and hackathon compliance, here is the exact verification status of ContractSync:
 
-### ✅ Tested and Programmatically Verified on Host System
-- **Google Antigravity CLI Installation**: `agy` v1.5.3 installed on `PATH` (`C:\Users\manis\AppData\Local\agy\bin\agy.exe`) and authenticated with Google credentials.
-- **Docker Desktop & Engine**: Docker Desktop 4.98.0 / Engine 29.9.2 verified running and healthy on WSL2 (`desktop-linux`).
-- **Bundled Mattermost Deployment**: Docker container `switchdash-local-mattermost-mattermost-1` (Mattermost Team Edition 11.9.0) running and healthy on `127.0.0.1:57751->8065/tcp`.
-- **Agent Client Protocol (ACP) Engine**: Verified JSON-RPC 2.0 handshake (`protocolVersion: 1`), session lifecycle (`session/new`), prompt turns (`session/prompt`), and token streaming using `agy acp --stdio`. Permission bypass flags (`--dangerously-skip-permissions`) have been completely removed.
-- **Two Independent Agent Sessions**: `SpecArchitect` and `FrontendSync` initialized with separate ACP sessions, separate configurations, and separate identities.
-- **Semantic Breaking-Change Analyzer**: OpenAPI 3.x schema parser accurately identifying field renames, type mutations, and enum additions.
-- **Strict Human Approval Gate**: Verified that `demo-workspace/openapi.yaml` remains byte-for-byte identical before human approval; verified rejection of non-conforming (`"Looks good"`) and incomplete approval candidates.
-- **TypeScript Codegen & Compiler Check**: TypeScript interface regeneration, `@deprecated` JSDoc annotation preservation, mock fixture synchronization, and live `npx tsc --noEmit` compiler validation (exit code 0, 0 errors).
-- **Automated Test Suite (11/11 Passing)**: Full test suite in `tests/` verifying all business logic and isolated ACP turns.
-- **Interactive Web Simulator**: Static client-side simulator on GitHub Pages representing the 7-step Switch protocol flow.
-
-### 🔍 Official Switch Console v0.40.1 Platform Limitation on Windows
-- **Official Unpatched Binary Restored**: `SwitchConsole\resources\app.asar` has been restored to its official, untouched release version.
-- **Official Provider Restriction**: The official Switch Console v0.40.1 Windows binary hardcodes a rejection check for the Antigravity provider:
-  `{"provider": "antigravity", "installed": false, "reason": "provider_not_installed", "error": "Antigravity ACP has no Windows build, so it cannot run on Windows."}`.
-- **Available Host Providers**: Switch Console only recognizes `["claude", "cursor", "opencode", "antigravity"]`. While `OpenAI Codex` v0.167.0 is authenticated and available on the host (`codex.exe`), Switch Console does not yet have an adapter for Codex, and Claude/Cursor/OpenCode are not installed.
-- **Standalone ACP Verification**: Despite Switch Console's upstream platform restriction, Google Antigravity ACP (`agy acp --stdio`) runs natively on Windows 11 and successfully executes the entire end-to-end ContractSync workflow.
+### ✅ Live End-to-End Execution Verified in Official Switch + Mattermost
+- **Google Antigravity CLI Installation**: `agy` v1.5.3 installed on host (`C:\Users\manis\AppData\Local\agy\bin\agy.exe`) and fully authenticated with Google credentials.
+- **Docker Desktop & Engine**: Running on WSL2 (`docker-desktop`), engine active.
+- **Bundled Mattermost Deployment**: Docker container `switchdash-local-mattermost-mattermost-1` (Mattermost Team Edition 11.9.0) active on `127.0.0.1:57751`.
+- **PostgreSQL 16**: Local Switch database listening on port `57752`.
+- **Switch Core & Switch Console**: Switch Core 0.31.0 daemon running on `127.0.0.1:57750` connected to Switch Console v0.40.1.
+- **Two Real Switch-Managed Antigravity Agents**:
+  - `spec-architect`: Registered in Switch, provisioned with Mattermost bot account, runs Google Antigravity ACP runtime.
+  - `frontend-sync`: Registered in Switch, provisioned with Mattermost bot account, runs Google Antigravity ACP runtime.
+- **Real Mattermost Channel (`#api-contract-room`)**:
+  1. Human developer (`user`) posted API change request in `#api-contract-room`.
+  2. SpecArchitect received the turn via Switch, evaluated `openapi.yaml`, identified breaking field rename and enum addition, and posted the breaking change assessment and migration proposal into `#api-contract-room`.
+  3. Verified `openapi.yaml` remained 100% byte-for-byte unmodified before human approval.
+  4. Human developer posted explicit `APPROVE:` command in `#api-contract-room`.
+  5. SpecArchitect updated `openapi.yaml` to v1.1.0 with backward compatibility (`availability_state`, `role`, and deprecated `spot_status`), and handed off work to `@frontend-sync`.
+  6. FrontendSync received mention handoff via Switch, regenerated `src/api.types.ts`, updated `src/mocks.ts`, executed `npx tsc --noEmit` (exit code 0, 0 errors), and posted the live compilation report into `#api-contract-room`.
+- **Permission Security**: Strict zero `--dangerously-skip-permissions` across all agent invocations.
+- **Automated Test Suite (11/11 Passing)**: Full test suite in `tests/run-all-tests.ts` verifying all components, including isolated Antigravity ACP sessions and live TypeScript compilation.
+- **Interactive Web Simulator & Showcase**: Deployed to GitHub Pages at [https://manishr075.github.io/contractsync/](https://manishr075.github.io/contractsync/).
 
 ---
 
