@@ -2,6 +2,7 @@ import { Spot } from './api.types.js';
 
 /**
  * Mock response data adhering to the Spot contract (v1.0.0)
+ * Synchronized by: ContractSync FrontendSync Agent
  */
 export const mockSpotResponse: Spot = {
   id: 101,

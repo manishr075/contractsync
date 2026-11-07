@@ -1,10 +1,10 @@
 import assert from 'assert';
-import { SwitchServer } from '../switch/integration/switch-server.js';
-import { SwitchClient } from '../switch/integration/switch-client.js';
-import { SwitchMessagePayload } from '../switch/integration/types.js';
+import { SwitchServer } from '../switch/simulator/switch-server.js';
+import { SwitchClient } from '../switch/simulator/switch-client.js';
+import { SwitchMessagePayload } from '../switch/simulator/types.js';
 
 export async function testSwitchWireProtocol() {
-  console.log(`\n▶ [Test 10] Switch Protocol WebSocket & Operations Verification`);
+  console.log(`\n▶ [Test 10] Offline Switch Simulator Wire Protocol & Operations (Test Mock)`);
 
   const port = 8797;
   const server = new SwitchServer({ port });

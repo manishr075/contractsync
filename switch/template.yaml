@@ -1,36 +1,63 @@
+# Switch 0.31 Room & Agent Template — ContractSync
+# Flip the Switch 2026 Hackathon (Best Business Workflow Track)
 version: 2
-name: api-contract-sync-template
-description: Automated API contract synchronization room template for Flip the Switch 2026
-type: room
+name: api-contract-sync
+description: "Autonomous API Contract Governance and Frontend Synchronization via Switch, Google Antigravity (agy ACP), and Mattermost."
+type: group
 
-room:
-  name: api-contract-room
-  channel: "#api-contract-room"
-  description: Coordination room for API contract updates and frontend synchronization
-  messaging_app: local
-  instructions: |
-    Coordinate API contract updates. SpecArchitect detects breaking changes and awaits human approval.
-    FrontendSync synchronizes TypeScript types and mocks upon approved contract publication.
+params:
+  channel_name:
+    type: string
+    label: "Mattermost Channel Name"
+    default: "api-contract-room"
+  workspace_path:
+    type: string
+    label: "Local Workspace Directory"
+    default: "./demo-workspace"
+
+rooms:
+  - name: "{channel_name}"
+    channel: "#{channel_name}"
+    channel_type: channel_public
+    messaging_app: mattermost
+    description: "Shared engineering channel for API contract updates, breaking change assessment, and automated frontend synchronization."
+    instructions: |
+      This room coordinates API contract changes between backend and frontend engineering.
+      
+      Workflow Protocol:
+      1. Human developer requests an API schema change in this channel.
+      2. @spec-architect evaluates the modification against openapi.yaml, detects breaking changes, and formulates a backward-compatible migration plan.
+      3. File modifications are STRICTLY BLOCKED until an authorized developer posts 'APPROVE: ...'.
+      4. Upon explicit approval, @spec-architect updates openapi.yaml and hands off to @frontend-sync.
+      5. @frontend-sync regenerates TypeScript types (src/api.types.ts), synchronizes mock data (src/mocks.ts), and executes 'npx tsc --noEmit' compiler verification.
+      6. @frontend-sync posts the verified compiler report to the room.
+    agents:
+      - "@spec-architect"
+      - "@frontend-sync"
+    kickoff: |
+      ContractSync system online. @spec-architect (Backend API Guardian) and @frontend-sync (Frontend Integration Engineer) are connected via Switch with Google Antigravity ACP runtime. Post an API change request to begin.
 
 agents:
   - name: spec-architect
-    description: Backend API Guardian responsible for OpenAPI specification integrity and breaking change detection
-    addressing: anyone
+    display_name: "SpecArchitect (API Guardian)"
+    description: "Backend API Guardian responsible for OpenAPI specification integrity, breaking change detection, and human approval enforcement."
     provider: antigravity
     location: this_computer
-    directory: ./demo-workspace
-    instructions_file: ../agents/spec-architect/instructions.md
+    directory: "{workspace_path}"
+    addressing: anyone
+    instructions_file: "agents/spec-architect/instructions.md"
 
   - name: frontend-sync
-    description: Frontend Integration Engineer responsible for TypeScript types, mock sync, and tsc validation
-    addressing: anyone
+    display_name: "FrontendSync (Integration Engineer)"
+    description: "Frontend Integration Engineer responsible for TypeScript type generation, mock data synchronization, and tsc compiler verification."
     provider: antigravity
     location: this_computer
-    directory: ./demo-workspace
-    instructions_file: ../agents/frontend-sync/instructions.md
+    directory: "{workspace_path}"
+    addressing: anyone
+    instructions_file: "agents/frontend-sync/instructions.md"
 
 roles:
   - name: contract_approver
-    description: Authorized human developer who can approve breaking API changes
+    description: "Authorized developer permitted to issue 'APPROVE:' commands for API migrations."
     assigned_to:
       - developer

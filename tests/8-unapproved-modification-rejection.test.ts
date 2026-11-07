@@ -2,7 +2,7 @@ import assert from 'assert';
 import path from 'path';
 import fs from 'fs';
 import { SpecArchitectAgent } from '../agents/spec-architect/agent.js';
-import { SwitchServer } from '../switch/integration/switch-server.js';
+import { SwitchServer } from '../switch/simulator/switch-server.js';
 
 export async function testUnapprovedModificationRejection() {
   console.log(`\n▶ [Test 8] Rejection of Unapproved Contract Modifications`);

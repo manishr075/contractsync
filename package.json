@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "start:server": "tsx scripts/run-switch-server.ts",
-    "demo": "tsx scripts/run-demo.ts",
+    "workflow:antigravity": "tsx scripts/run-antigravity-workflow.ts",
+    "demo": "tsx scripts/run-antigravity-workflow.ts",
+    "demo:simulator": "tsx scripts/run-demo.ts",
     "test": "tsx tests/run-all-tests.ts",
     "generate:types": "tsx scripts/generate-types.ts",
     "verify:contract": "tsx scripts/verify-contract.ts",

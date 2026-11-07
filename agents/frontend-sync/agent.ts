@@ -1,6 +1,6 @@
 import path from 'path';
-import { SwitchClient } from '../../switch/integration/switch-client.js';
-import { SwitchMessagePayload } from '../../switch/integration/types.js';
+import { SwitchClient } from '../../switch/simulator/switch-client.js';
+import { SwitchMessagePayload } from '../../switch/simulator/types.js';
 import { FrontendSyncEngine, SyncResult } from './sync-engine.js';
 
 export class FrontendSyncAgent {

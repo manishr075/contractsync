@@ -3,230 +3,179 @@
 **Project**: ContractSync  
 **Hackathon**: Flip the Switch 2026  
 **Track**: Best Business Workflow  
-**Tagline**: *One API contract. Two agents. Zero synchronization chaos.*
+**Primary Messaging App**: Mattermost (`#api-contract-room`)  
+**Agent Provider**: Google Antigravity CLI (`agy acp --stdio`)  
 
 ---
 
-## 1. High-Level System Architecture
+## 1. Architectural Tiers & Separation of Concerns
 
-ContractSync orchestrates API contract governance and cross-stack synchronization between backend and frontend engineering domains. The coordination substrate is **Switch**, an open-source platform that enables autonomous AI agents to collaborate with human developers in shared communication rooms.
+ContractSync is designed with rigorous separation between production deployment infrastructure, automated test harnesses, and the public web showcase:
 
-```mermaid
-flowchart TB
-    subgraph HumanLayer ["Human Engineering Team"]
-        Dev["👤 Developer (@developer)"]
-    end
-
-    subgraph SwitchInfra ["Switch Room: #api-contract-room"]
-        direction TB
-        Log[("Append-Only Message Bus<br/>(Monotonic seq ordering)")]
-        WsHub["Agent Bridge & WebSocket Hub<br/>(/agents/{agent_id}/connection/ws)"]
-        OpsRouter["Operations API Router<br/>(post_message, send_targeted_message, read_context)"]
-    end
-
-    subgraph AgentLayer ["Autonomous Specialized Agents"]
-        direction TB
-        subgraph SpecArch ["Agent 1: SpecArchitect"]
-            SA_Core["Backend API Guardian"]
-            SA_Diff["Semantic Diff Engine"]
-            SA_Gate["Human Approval Gate"]
-            SA_Writer["OpenAPI 3.x Mutator"]
-        end
-
-        subgraph FESync ["Agent 2: FrontendSync"]
-            FE_Core["Frontend Integration Engineer"]
-            FE_Gen["TypeScript Codegen Engine"]
-            FE_Mock["Mock Response Synchronizer"]
-            FE_Compiler["Real tsc --noEmit Verifier"]
-        end
-    end
-
-    subgraph WorkspaceLayer ["Project Workspace (demo-workspace)"]
-        OAS["openapi.yaml (OpenAPI 3.0.3)"]
-        TS_Types["src/api.types.ts"]
-        TS_Mocks["src/mocks.ts"]
-        TS_App["src/index.ts (Consumer)"]
-    end
-
-    %% Human interactions
-    Dev -->|"1. Propose API change"| OpsRouter
-    Dev -->|"3. Post explicit approval"| OpsRouter
-
-    %% Switch Routing
-    OpsRouter --> Log
-    Log --> WsHub
-    WsHub -->|"WebSocket Events"| SA_Core
-    WsHub -->|"WebSocket Events"| FE_Core
-
-    %% SpecArchitect actions
-    SA_Core --> SA_Diff
-    SA_Diff -->|"Read Current Spec"| OAS
-    SA_Core -->|"2. Post Breaking Proposal"| OpsRouter
-    SA_Gate -->|"Verify Approval"| SA_Core
-    SA_Core -->|"4. Update Contract"| OAS
-    SA_Core -->|"5. Hand off to @frontend-sync"| OpsRouter
-
-    %% FrontendSync actions
-    FE_Core -->|"6. Read Approved Spec"| OAS
-    FE_Core -->|"Generate Types"| TS_Types
-    FE_Core -->|"Update Fixtures"| TS_Mocks
-    FE_Core -->|"Execute Compiler"| TS_App
-    FE_Core -->|"7. Report Status & tsc Output"| OpsRouter
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                       TIER 1: OFFICIAL SWITCH & ANTIGRAVITY                     │
+│  • Messaging Platform: Mattermost (#api-contract-room)                          │
+│  • Room Manager: Official Switch Console (v0.40.1) using switch/template.yaml   │
+│  • Agent Provider: Google Antigravity CLI ('agy acp --stdio')                  │
+│  • Protocol: Agent Client Protocol (ACP) v1 JSON-RPC over stdio                │
+│  • Independent Sessions: SpecArchitect (Session A), FrontendSync (Session B)   │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                         ▲
+                                         │
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                    TIER 2: AUTOMATED TEST & VERIFICATION HARNESS                │
+│  • 11 Deterministic Automated Test Suites ('npm test')                          │
+│  • Offline Simulator Harness: 'switch/simulator/' (in-memory WS/HTTP mock)      │
+│  • Integration Test 11: Real end-to-end execution with 'agy acp --stdio'        │
+│  • Compiler Verification: Live 'npx tsc --noEmit' in workspace                  │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                         ▲
+                                         │
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                 TIER 3: INTERACTIVE WEB SIMULATOR (GITHUB PAGES)                │
+│  • Client-side browser demonstration at https://manishr075.github.io/contractsync│
+│  • Provides judges with an immediate interactive preview of the 7-step flow     │
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 2. Agent Communication & Coordination Flow
+## 2. End-to-End Coordination Flow
 
-In standard chatbot setups, agents are invoked via direct function calls or private API scripts. In ContractSync, **Switch is the mandatory communication infrastructure**:
-- Every action, proposal, audit log, and handoff passes through the Switch Room log.
-- Hand-offs between agents occur exclusively via mentions (`@frontend-sync`) or targeted Switch operations (`send_targeted_message`).
-- The log is append-only, preserving an immutable trace of decisions.
+All interactions occur through the shared Mattermost channel `#api-contract-room` bridged by Switch:
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor Dev as Developer (@developer)
-    participant Switch as Switch Room (#api-contract-room)
-    participant SA as SpecArchitect (@spec-architect)
-    participant FS as FrontendSync (@frontend-sync)
-    participant FSys as File System / Compiler
+    participant MM as Mattermost (#api-contract-room)
+    participant Switch as Switch Console Bridge
+    participant SA as SpecArchitect (agy acp)
+    participant FS as FrontendSync (agy acp)
+    participant Disk as Workspace Files & TSC
 
-    Dev->>Switch: Post change request: "Update GET /api/spots. Rename spot_status..."
-    Switch-->>SA: WebSocket event (msg #1, addressed)
-    Note over SA: Analyzes openapi.yaml.<br/>Flags breaking change.<br/>Locks contract modification.
-    SA->>Switch: Post proposal + [HUMAN APPROVAL REQUIRED] (msg #2)
-    Switch-->>Dev: Broadcast proposal to developer
+    Dev->>MM: Post API change request: "Update GET /api/spots. Rename spot_status to availability_state..."
+    MM->>Switch: Mattermost webhook / WebSocket push
+    Switch->>SA: Dispatch turn to SpecArchitect Antigravity ACP session
+    SA->>Disk: Read demo-workspace/openapi.yaml
+    Note over SA: Evaluates schema diff.<br/>Identifies breaking rename.<br/>BLOCKS contract modification.
+    SA->>Switch: Post structured proposal & [HUMAN APPROVAL REQUIRED]
+    Switch->>MM: SpecArchitect bot posts assessment to Mattermost
     
-    Note over Dev: Developer reviews migration impact
-    Dev->>Switch: Post approval: "APPROVE: Introduce availability_state, retain spot_status..." (msg #3)
-    Switch-->>SA: WebSocket event (msg #3)
-    
-    Note over SA: Validates approval syntax & terms.<br/>Audits message seq.<br/>Updates openapi.yaml to v1.1.0.
-    SA->>FSys: Write updated demo-workspace/openapi.yaml
-    SA->>Switch: Post [CONTRACT APPROVED] + Hand off to @frontend-sync (msg #4)
-    Switch-->>FS: WebSocket event (msg #4, addressed)
-    
-    Note over FS: Ingests approved schema v1.1.0.<br/>Generates TypeScript types.<br/>Synchronizes mock fixtures.
-    FS->>FSys: Write demo-workspace/src/api.types.ts
-    FS->>FSys: Write demo-workspace/src/mocks.ts
-    FS->>FSys: Execute `npx tsc --noEmit`
-    FSys-->>FS: Compiler result: 0 errors (Exit code 0)
-    
-    FS->>Switch: Post [FRONTEND SYNCHRONIZATION COMPLETE] + [TYPE CHECK PASSED] (msg #5)
-    Switch-->>Dev: Final verification visible in room
+    opt Rejection of unapproved or incomplete input
+        Dev->>MM: "Looks good, proceed!" or missing deprecation terms
+        Switch->>SA: Forward candidate
+        SA->>Switch: Reject: "Missing mandatory backward compatibility terms"
+        Switch->>MM: SpecArchitect bot warns developer; openapi.yaml remains untouched
+    end
+
+    Dev->>MM: Post compliant approval: "APPROVE: rename spot_status to availability_state retaining..."
+    Switch->>SA: Forward approval
+    SA->>Disk: Update demo-workspace/openapi.yaml (Bump to v1.1.0, add new field, deprecate old)
+    SA->>Switch: Post [CONTRACT APPROVED] with handoff to @frontend-sync
+    Switch->>MM: SpecArchitect bot posts approval confirmation
+    Switch->>FS: Dispatch turn to FrontendSync Antigravity ACP session
+    FS->>Disk: Regenerate demo-workspace/src/api.types.ts
+    FS->>Disk: Synchronize demo-workspace/src/mocks.ts
+    FS->>Disk: Execute 'npx tsc --noEmit'
+    Disk-->>FS: Compiler output (Exit code 0, 0 errors)
+    FS->>Switch: Post [FRONTEND SYNCHRONIZATION COMPLETE] & [TYPE CHECK PASSED]
+    Switch->>MM: FrontendSync bot posts compiler results to Mattermost
 ```
 
 ---
 
-## 3. Human Approval Gate State Machine
+## 3. Google Antigravity CLI & ACP Integration
 
-ContractSync enforces strict human governance over API breaking changes. No agent can unilaterally alter contract files without validated human consent.
+Switch integrates with AI coding agents using the **Agent Client Protocol (ACP)**. When an agent is configured with `provider: antigravity`, Switch launches Google's official `agy` binary:
 
-```mermaid
-stateDiagram-v2
-    [*] --> Idle: Room Initialized
-
-    state Idle {
-        [*] --> Listening
-        Listening --> ChangeDetected: Message matches "update GET /..."
-    }
-
-    state ChangeDetected {
-        [*] --> ReadCurrentSpec
-        ReadCurrentSpec --> DiffAnalysis
-        DiffAnalysis --> ClassifyRisk
-        ClassifyRisk --> EmitProposal
-    }
-
-    ChangeDetected --> AwaitingHumanApproval: Post [HUMAN APPROVAL REQUIRED]
-    
-    state AwaitingHumanApproval {
-        [*] --> BlockModifications: Spec file write lock active
-        BlockModifications --> ReviewMessage: Incoming message in room
-        ReviewMessage --> ValidateSyntax: Starts with "APPROVE:"?
-        ValidateSyntax --> CheckMitigation: Validates backward compat terms
-        CheckMitigation --> ApprovalGranted: Syntax & mitigation valid
-        CheckMitigation --> RequestClarification: Missing mitigation parameters
-        ReviewMessage --> ProposalRejected: Starts with "REJECT:"
-    }
-
-    RequestClarification --> AwaitingHumanApproval: Post warning in room
-    ProposalRejected --> Idle: Contract remains untouched
-    ApprovalGranted --> ContractCommitted: Update openapi.yaml to v1.1.0
-
-    state ContractCommitted {
-        [*] --> RecordAuditTrail
-        RecordAuditTrail --> DispatchHandoff: Send targeted msg to @frontend-sync
-    }
-
-    ContractCommitted --> FrontendSyncing: Handoff delivered
-
-    state FrontendSyncing {
-        [*] --> GenerateTypes
-        GenerateTypes --> UpdateMocks
-        UpdateMocks --> RunCompiler
-        RunCompiler --> VerifyExitCode
-    }
-
-    FrontendSyncing --> VerificationComplete: Compiler exit code 0
-    FrontendSyncing --> VerificationFailed: Compiler exit code != 0
-
-    VerificationComplete --> Idle: Post [TYPE CHECK PASSED]
-    VerificationFailed --> Idle: Post [TYPE CHECK FAILED]
+```bash
+agy acp --stdio --dangerously-skip-permissions
 ```
+
+### Protocol Mechanics
+1. **Transport**: JSON-RPC 2.0 over standard input and output (`stdio`).
+2. **Handshake**: The client initializes with `protocolVersion: 1`:
+   ```json
+   {
+     "jsonrpc": "2.0",
+     "id": 1,
+     "method": "initialize",
+     "params": {
+       "protocolVersion": 1,
+       "clientInfo": { "name": "switch-console", "version": "0.40.1" }
+     }
+   }
+   ```
+3. **Session Creation**: Switch creates an isolated session per agent:
+   ```json
+   {
+     "jsonrpc": "2.0",
+     "id": 2,
+     "method": "session/new",
+     "params": {
+       "cwd": "C:/.../demo-workspace",
+       "systemPrompt": "<Agent role instructions>"
+     }
+   }
+   ```
+4. **Prompt Dispatch**: When a message arrives from Mattermost, Switch dispatches a turn:
+   ```json
+   {
+     "jsonrpc": "2.0",
+     "id": 3,
+     "method": "session/prompt",
+     "params": {
+       "sessionId": "<session-uuid>",
+       "prompt": [{ "type": "text", "text": "<message content>" }]
+     }
+   }
+   ```
+5. **Streaming Updates**: The Antigravity engine streams updates via `session/update` notifications (`agent_message_chunk`) and concludes with `stopReason: "end_turn"`.
+
+Both **SpecArchitect** and **FrontendSync** run as completely separate processes and sessions. They do not share memory, variables, or direct process calls; all handoffs occur as messages routed through the Switch room.
 
 ---
 
-## 4. Data Flow & Artifact Lifecycle
+## 4. The Human Approval Gate
 
-```mermaid
-flowchart LR
-    subgraph Inputs ["Input API Definition"]
-        OAS_Orig["openapi.yaml (v1.0.0)<br/>spot_status: string (required)"]
-    end
+A fundamental design requirement is that **AI agents must never unilaterally deploy breaking contract changes**:
 
-    subgraph DiffTransform ["Semantic Diff & Migration"]
-        Analyzer["SpecArchitect Diff Engine"]
-        ApprovedOAS["openapi.yaml (v1.1.0)<br/>availability_state: string (req)<br/>role: enum (admin|user|guest)<br/>spot_status: string (deprecated, opt)"]
-    end
-
-    subgraph SyncedArtifacts ["Generated Frontend Artifacts"]
-        Types["src/api.types.ts<br/>Spot interface<br/>SpotRole union type<br/>@deprecated JSDoc"]
-        Mocks["src/mocks.ts<br/>mockSpotResponse<br/>getMockSpots()"]
-    end
-
-    subgraph QualityGate ["Verification"]
-        TSC["TypeScript Compiler<br/>(tsc --noEmit)"]
-        Result["Exit Code: 0<br/>Zero Type Errors"]
-    end
-
-    OAS_Orig --> Analyzer
-    Analyzer --> ApprovedOAS
-    ApprovedOAS --> Types
-    ApprovedOAS --> Mocks
-    Types --> TSC
-    Mocks --> TSC
-    TSC --> Result
-```
+1. **State Machine**:
+   - `IDLE`: Listening for change requests.
+   - `AWAITING_APPROVAL`: Breaking change detected; contract modification locked.
+   - `COMMITTED`: Human approval validated; contract updated and handed off.
+2. **Strict File Locking**:
+   - Before human approval is recorded, `demo-workspace/openapi.yaml` is mathematically verified to be unmodified (verified via SHA-256 content hashing in `isSpecUnmodified()`).
+3. **Validation Rules**:
+   - Approvals must start with `APPROVE:` or `APPROVED:`.
+   - Approvals must explicitly specify the mitigation terms (`availability_state`, `deprecated` retention for `spot_status`, and `role` enum).
+   - Vague instructions like *"Looks good"* or *"Proceed"* are immediately rejected, and the contract remains locked.
 
 ---
 
-## 5. Security & Isolation Boundaries
+## 5. Frontend Synchronization & Compiler Verification
 
-1. **Agent Identity Isolation**:
-   - Each agent registers independently and receives a unique bearer token (`api_key`).
-   - Requests to the Switch bridge must present `Authorization: Bearer <token>`.
-   - Agents cannot impersonate each other in the room log.
+FrontendSync deterministically bridges the OpenAPI contract into TypeScript:
 
-2. **File System Sandboxing**:
-   - `SpecArchitect` has write permissions exclusively on OpenAPI specification files in the target directory (`demo-workspace/openapi.yaml`).
-   - `FrontendSync` has write permissions exclusively on generated TypeScript artifacts (`demo-workspace/src/api.types.ts` and `demo-workspace/src/mocks.ts`).
-   - Neither agent modifies files outside the designated workspace.
+1. **Type Generation (`src/api.types.ts`)**:
+   - Extracts OpenAPI schemas.
+   - Preserves `@deprecated` JSDoc annotations so frontend developers see deprecation warnings in their IDEs.
+   - Converts OpenAPI enum arrays (e.g. `['admin', 'user', 'guest']`) into strict TypeScript union types (`'admin' | 'user' | 'guest'`).
+2. **Mock Response Synchronization (`src/mocks.ts`)**:
+   - Populates mock response objects with valid enum values and dual-field data (both new and deprecated fields) to maintain legacy consumer compatibility.
+3. **Real Compiler Verification**:
+   - Runs `npx tsc --noEmit` using the active Node.js and TypeScript environment.
+   - Zero-tolerance policy: if `tsc` exits with any code other than `0`, the sync is flagged as failed (`[TYPE CHECK FAILED]`) and reported to the room.
 
-3. **No Credential Exposure**:
-   - Secrets and environment variables (`SWITCH_SERVER_URL`, `SWITCH_API_KEY`) are managed strictly through environment variables.
-   - No hardcoded keys or tokens are stored in source code or Git history.
+---
 
-4. **Immutable Audit Trail**:
-   - Switch's append-only room log records every modification request, proposal, human approval token, and verification result with monotonic sequence numbering and ISO timestamps.
+## 6. Offline Test Harness (`switch/simulator/`)
+
+For environments without an active Switch Console desktop installation or Docker daemon (such as CI/CD runners), `switch/simulator/` provides a local in-memory mock WebSocket and HTTP server:
+- Implements the Switch wire protocol endpoints:
+  - `POST /agents` (registration)
+  - `GET /agents/{id}/connection/ws` (WebSocket connection with `welcome`, `event`, and `gap` frames)
+  - `POST /agents/{id}/ops/{operation}` (`post_message`, `send_targeted_message`, `read_context`)
+- Used by unit tests 1–10 to verify protocol handling and schema logic deterministically without external dependencies.

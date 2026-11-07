@@ -8,6 +8,7 @@ import { testTypeScriptCompilation } from './7-typescript-compiler.test.js';
 import { testUnapprovedModificationRejection } from './8-unapproved-modification-rejection.test.js';
 import { testInvalidApprovalHandling } from './9-invalid-approval-handling.test.js';
 import { testSwitchWireProtocol } from './10-switch-wire-protocol.test.js';
+import { testAntigravityAcpWorkflow } from './11-antigravity-acp-workflow.test.js';
 
 interface TestResult {
   id: number;
@@ -32,7 +33,8 @@ async function runTestSuite() {
     { id: 7, name: 'TypeScript Compilation Verification (tsc --noEmit)', fn: testTypeScriptCompilation },
     { id: 8, name: 'Rejection of Unapproved Contract Modifications', fn: testUnapprovedModificationRejection },
     { id: 9, name: 'Handling Invalid or Incomplete Approval Instructions', fn: testInvalidApprovalHandling },
-    { id: 10, name: 'Switch Protocol WebSocket & Operations Verification', fn: testSwitchWireProtocol }
+    { id: 10, name: 'Switch Simulator Wire Protocol & Operations (Test Mock)', fn: testSwitchWireProtocol },
+    { id: 11, name: 'Genuine Antigravity ACP Integration & Human-in-the-Loop Gate', fn: testAntigravityAcpWorkflow }
   ];
 
   const results: TestResult[] = [];

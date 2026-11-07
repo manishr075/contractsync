@@ -1,16 +1,17 @@
 import path from 'path';
 import fs from 'fs';
-import { SwitchServer } from '../switch/integration/switch-server.js';
+import { SwitchServer } from '../switch/simulator/switch-server.js';
 import { SpecArchitectAgent } from '../agents/spec-architect/agent.js';
 import { FrontendSyncAgent } from '../agents/frontend-sync/agent.js';
-import { SwitchMessagePayload } from '../switch/integration/types.js';
+import { SwitchMessagePayload } from '../switch/simulator/types.js';
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function runContractSyncDemo() {
   console.log(`\n======================================================================`);
-  console.log(`  CONTRACTSYNC — FLIP THE SWITCH 2026 DEMONSTRATION WORKFLOW`);
-  console.log(`  "One API contract. Two agents. Zero synchronization chaos."`);
+  console.log(`  CONTRACTSYNC — OFFLINE SIMULATOR DEMONSTRATION WORKFLOW`);
+  console.log(`  (Using Local Test Simulator & Mock WebSocket Message Bus)`);
+  console.log(`  For Genuine Antigravity ACP: run 'npm run workflow:antigravity'`);
   console.log(`======================================================================\n`);
 
   const port = 8799;
