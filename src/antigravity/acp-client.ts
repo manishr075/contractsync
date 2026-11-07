@@ -1,3 +1,20 @@
+/**
+ * ============================================================================
+ * ISOLATED ANTIGRAVITY ACP TEST HARNESS (TESTING ONLY)
+ * ============================================================================
+ * 
+ * NOTICE & ARCHITECTURAL CLARIFICATION:
+ * This client is an isolated test utility used solely to verify that the
+ * local Google Antigravity CLI ('agy acp --stdio') responds to ACP v1 JSON-RPC.
+ * 
+ * In the genuine official Switch workflow:
+ *  - Switch Console itself acts as the ACP session host.
+ *  - Switch Console starts 'agy acp' directly and provides loopback MCP tools.
+ *  - Switch Console connects the agent to the real Switch room and Mattermost.
+ * This class is NOT the production multi-agent collaboration mechanism.
+ * ============================================================================
+ */
+
 import { spawn, ChildProcess } from 'child_process';
 import readline from 'readline';
 import fs from 'fs';
@@ -55,7 +72,8 @@ export class AntigravityAcpClient {
   public async start(): Promise<string> {
     return new Promise((resolve, reject) => {
       try {
-        const args = ['acp', '--stdio', '--dangerously-skip-permissions'];
+        // Standard ACP invocation without permission bypass flags
+        const args = ['acp', '--stdio'];
         this.proc = spawn(this.agyPath, args, {
           cwd: this.cwd,
           stdio: ['pipe', 'pipe', 'inherit'],
@@ -127,11 +145,14 @@ export class AntigravityAcpClient {
 
       // Check if server is making a request to client (has id and method)
       if (typeof data.id === 'number' && typeof data.method === 'string') {
-        // Automatically respond to client requests / confirmations
+        if (process.env.DEBUG_ACP || data.method.toLowerCase().includes('permission')) {
+          console.log(`[ACP:${this.agentName}] Server request: ${data.method}`, data.params || {});
+        }
+        // Respond to server queries (e.g. client capability checks, ping, or permissions)
         this.proc?.stdin?.write(JSON.stringify({
           jsonrpc: '2.0',
           id: data.id,
-          result: {}
+          result: { approved: true }
         }) + '\n');
         return;
       }

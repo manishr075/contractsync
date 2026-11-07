@@ -1,3 +1,20 @@
+/**
+ * ============================================================================
+ * ISOLATED ANTIGRAVITY ACP TEST WORKFLOW (DEVELOPMENT & VERIFICATION)
+ * ============================================================================
+ * 
+ * NOTICE:
+ * This script runs an isolated test verification using direct Google Antigravity
+ * ACP stdio sessions ('agy acp --stdio') to verify LLM reasoning, schema analysis,
+ * and compiler execution.
+ * 
+ * In genuine production:
+ *  - Official Switch Console (v0.40.1) launches 'agy acp' processes.
+ *  - Mattermost (#api-contract-room) is the live messaging platform.
+ *  - See 'switch/template.yaml' for the production Switch room template.
+ * ============================================================================
+ */
+
 import fs from 'fs';
 import path from 'path';
 import { SpecArchitectAntigravityAgent } from '../agents/spec-architect/antigravity-agent.js';
@@ -7,9 +24,10 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function runAntigravityWorkflow() {
   console.log(`\n======================================================================`);
-  console.log(`  CONTRACTSYNC — GENUINE ANTIGRAVITY ACP WORKFLOW EXECUTION`);
-  console.log(`  Runtime: Google Antigravity CLI (agy acp --stdio)`);
-  console.log(`  Agents: @spec-architect (Session A) & @frontend-sync (Session B)`);
+  console.log(`  CONTRACTSYNC — ISOLATED ANTIGRAVITY ACP TEST WORKFLOW`);
+  console.log(`  Harness: Google Antigravity CLI (agy acp --stdio)`);
+  console.log(`  Target: Isolated verification of LLM analysis & compiler sync`);
+  console.log(`  Production Note: For live Switch/Mattermost, run via Switch Console`);
   console.log(`======================================================================\n`);
 
   const workspaceDir = path.resolve(process.cwd(), 'demo-workspace');

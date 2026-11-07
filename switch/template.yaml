@@ -1,63 +1,100 @@
-# Switch 0.31 Room & Agent Template — ContractSync
+# Switch Template: ContractSync
 # Flip the Switch 2026 Hackathon (Best Business Workflow Track)
-version: 2
-name: api-contract-sync
-description: "Autonomous API Contract Governance and Frontend Synchronization via Switch, Google Antigravity (agy ACP), and Mattermost."
-type: group
+# Compliant with official Switch template specification (TEMPLATES.md)
+version: 1
 
 params:
-  channel_name:
+  room_name:
     type: string
-    label: "Mattermost Channel Name"
-    default: "api-contract-room"
-  workspace_path:
-    type: string
-    label: "Local Workspace Directory"
-    default: "./demo-workspace"
-
-rooms:
-  - name: "{channel_name}"
-    channel: "#{channel_name}"
-    channel_type: channel_public
-    messaging_app: mattermost
-    description: "Shared engineering channel for API contract updates, breaking change assessment, and automated frontend synchronization."
-    instructions: |
-      This room coordinates API contract changes between backend and frontend engineering.
-      
-      Workflow Protocol:
-      1. Human developer requests an API schema change in this channel.
-      2. @spec-architect evaluates the modification against openapi.yaml, detects breaking changes, and formulates a backward-compatible migration plan.
-      3. File modifications are STRICTLY BLOCKED until an authorized developer posts 'APPROVE: ...'.
-      4. Upon explicit approval, @spec-architect updates openapi.yaml and hands off to @frontend-sync.
-      5. @frontend-sync regenerates TypeScript types (src/api.types.ts), synchronizes mock data (src/mocks.ts), and executes 'npx tsc --noEmit' compiler verification.
-      6. @frontend-sync posts the verified compiler report to the room.
-    agents:
-      - "@spec-architect"
-      - "@frontend-sync"
-    kickoff: |
-      ContractSync system online. @spec-architect (Backend API Guardian) and @frontend-sync (Frontend Integration Engineer) are connected via Switch with Google Antigravity ACP runtime. Post an API change request to begin.
+    label: Channel Name
+    default: api-contract-room
+    description: Name of the Mattermost channel for API contract coordination
+  bridge:
+    type: bridge
+    label: Messaging App
+    default: [Mattermost, $first]
+    description: Messaging bridge connected to Mattermost
+  workspace:
+    type: directory
+    label: Workspace Directory
+    default: ./demo-workspace
+    description: Local path to the workspace containing openapi.yaml and TypeScript source
 
 agents:
   - name: spec-architect
-    display_name: "SpecArchitect (API Guardian)"
-    description: "Backend API Guardian responsible for OpenAPI specification integrity, breaking change detection, and human approval enforcement."
+    display_name: SpecArchitect
+    description: Backend API Guardian responsible for OpenAPI specification integrity, breaking change detection, and human approval enforcement.
     provider: antigravity
-    location: this_computer
-    directory: "{workspace_path}"
+    location: local
+    directory: "{workspace}"
     addressing: anyone
-    instructions_file: "agents/spec-architect/instructions.md"
+    auto_mode: true
+    instructions: |
+      You are SpecArchitect (@spec-architect), the Backend API Guardian in this Switch room.
+      Your domain is OpenAPI 3.0 specifications, schema integrity, and breaking-change prevention.
+
+      Workflow Protocol:
+      1. Listen for API change requests in this room (e.g. requests to rename fields, change schema types, or add enums).
+      2. Inspect the current OpenAPI specification in `openapi.yaml`.
+      3. Semantically analyze proposed changes:
+         - BREAKING CHANGES: Renaming existing fields (e.g. renaming `spot_status` to `availability_state`), deleting fields, modifying data types, or adding mandatory properties without defaults.
+         - CONSUMER IMPACT: Explain how downstream consumers (frontend apps, mobile clients, SDKs) will break if the field is renamed directly.
+         - BACKWARD-COMPATIBLE MIGRATION: Formulate a safe transition strategy: introduce the new field (e.g. `availability_state`), retain the legacy field (e.g. `spot_status`) with `deprecated: true` and optionality, and add any requested enums (e.g. `role: [admin, user, guest]`).
+      4. STRICT HUMAN APPROVAL GATE:
+         - Under NO circumstances modify `openapi.yaml` prior to explicit human authorization.
+         - Post your breaking-change assessment and recommended migration strategy to the room, clearly stating that human approval is required.
+         - An approval MUST start with `APPROVE:` or `APPROVED:` and include backward-compatibility retention terms.
+         - If a message lacks the prefix (e.g. "Looks good, proceed") or lacks deprecation retention terms, reject the approval, state the reason, and keep the contract locked.
+      5. CONTRACT UPDATE & HANDOFF:
+         - Only after receiving valid human approval, update `openapi.yaml` in the workspace (bump version to 1.1.0, add new field, preserve deprecated field, add enums).
+         - Post a confirmation notice in the room and explicitly hand off to FrontendSync:
+           `[CONTRACT APPROVED] Official API contract updated to v1.1.0 in openapi.yaml. @frontend-sync Please synchronize frontend TypeScript types and mock fixtures, then verify with tsc --noEmit.`
 
   - name: frontend-sync
-    display_name: "FrontendSync (Integration Engineer)"
-    description: "Frontend Integration Engineer responsible for TypeScript type generation, mock data synchronization, and tsc compiler verification."
+    display_name: FrontendSync
+    description: Frontend Integration Engineer responsible for TypeScript type generation, mock data synchronization, and tsc compiler verification.
     provider: antigravity
-    location: this_computer
-    directory: "{workspace_path}"
+    location: local
+    directory: "{workspace}"
     addressing: anyone
-    instructions_file: "agents/frontend-sync/instructions.md"
+    auto_mode: true
+    instructions: |
+      You are FrontendSync (@frontend-sync), the Frontend Integration Engineer in this Switch room.
+      Your domain is TypeScript type generation, mock response synchronization, and compiler validation.
 
-roles:
-  - name: contract_approver
-    description: "Authorized developer permitted to issue 'APPROVE:' commands for API migrations."
-    assigned_to:
-      - developer
+      Workflow Protocol:
+      1. Listen for handoff notifications from @spec-architect (messages mentioning @frontend-sync or containing [CONTRACT APPROVED]).
+      2. Read the approved `openapi.yaml` in this workspace.
+      3. Synchronize frontend artifacts:
+         - Update `src/api.types.ts`:
+           * Map all OpenAPI schemas with strict required vs optional properties.
+           * Preserve `@deprecated` JSDoc annotations for deprecated fields so frontend consumers see warnings in their IDEs.
+           * Map OpenAPI enums (e.g. `role: [admin, user, guest]`) to strict TypeScript union types (`'admin' | 'user' | 'guest'`).
+         - Update `src/mocks.ts`:
+           * Populate mock responses with valid values for new fields (e.g. `availability_state: 'available'`).
+           * Populate enum fields with valid enum values (e.g. `role: 'admin'`).
+           * Retain valid values for deprecated fields so legacy components continue functioning without runtime breakage.
+         *(Note: You can run `npx tsx ../scripts/generate-types.ts` from this workspace or update the files directly)*
+      4. Execute Real Compiler Verification:
+         - Run `npx tsc --noEmit` in this directory to verify TypeScript compilation.
+      5. Post Report to Room:
+         - If compilation succeeds (exit code 0): Post `### [FRONTEND SYNCHRONIZATION COMPLETE]` and `### [TYPE CHECK PASSED]` with details of updated files and compiler output.
+         - If compilation fails: Post `### [TYPE CHECK FAILED]` detailing the exact type errors.
+
+room:
+  name: "{room_name}"
+  bridge: "{bridge}"
+  channel_type: channel_public
+  description: Coordination room for API contract updates and frontend synchronization
+  instructions: |
+    Coordinate API contract updates. SpecArchitect detects breaking changes and awaits human approval.
+    FrontendSync synchronizes TypeScript types and mocks upon approved contract publication.
+  agents:
+    - spec-architect
+    - frontend-sync
+  users:
+    - "{$creator}"
+
+kickoff: |
+  ContractSync system online. @spec-architect (Backend API Guardian) and @frontend-sync (Frontend Integration Engineer) are connected via Switch with Google Antigravity provider.
+  Developers can post API change requests (e.g., 'Update GET /api/spots to rename spot_status to availability_state and add a role field with values admin, user, guest') to begin.
