@@ -1,0 +1,14 @@
+{
+  "name": "contractsync-demo-frontend",
+  "version": "1.0.0",
+  "description": "Frontend workspace consuming Spot Service API types and mock responses",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.9.0"
+  }
+}

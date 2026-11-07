@@ -1,0 +1,36 @@
+version: 2
+name: api-contract-sync-template
+description: Automated API contract synchronization room template for Flip the Switch 2026
+type: room
+
+room:
+  name: api-contract-room
+  channel: "#api-contract-room"
+  description: Coordination room for API contract updates and frontend synchronization
+  messaging_app: local
+  instructions: |
+    Coordinate API contract updates. SpecArchitect detects breaking changes and awaits human approval.
+    FrontendSync synchronizes TypeScript types and mocks upon approved contract publication.
+
+agents:
+  - name: spec-architect
+    description: Backend API Guardian responsible for OpenAPI specification integrity and breaking change detection
+    addressing: anyone
+    provider: antigravity
+    location: this_computer
+    directory: ./demo-workspace
+    instructions_file: ../agents/spec-architect/instructions.md
+
+  - name: frontend-sync
+    description: Frontend Integration Engineer responsible for TypeScript types, mock sync, and tsc validation
+    addressing: anyone
+    provider: antigravity
+    location: this_computer
+    directory: ./demo-workspace
+    instructions_file: ../agents/frontend-sync/instructions.md
+
+roles:
+  - name: contract_approver
+    description: Authorized human developer who can approve breaking API changes
+    assigned_to:
+      - developer
