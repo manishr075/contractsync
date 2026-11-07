@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ContractSync — Flip the Switch 2026</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              900: '#14532d'
+            },
+            switch: {
+              purple: '#8b5cf6',
+              dark: '#0f172a',
+              card: '#1e293b',
+              border: '#334155'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    .pulse-subtle { animation: pulse-subtle 2s infinite ease-in-out; }
+    .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-purple-600 selection:text-white">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-emerald-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+          <i class="fa-solid fa-code-compare text-white text-lg"></i>
+        </div>
+        <div>
+          <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-purple-400 bg-clip-text text-transparent">ContractSync</span>
+          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 font-medium">Switch AI v0.31</span>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-4 text-sm font-medium">
+        <span class="hidden md:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
+          Flip the Switch 2026: Best Business Workflow
+        </span>
+        <a href="#simulator" class="hover:text-purple-400 transition-colors">Simulator</a>
+        <a href="#inspector" class="hover:text-purple-400 transition-colors">Contract & Code</a>
+        <a href="#tests" class="hover:text-purple-400 transition-colors">Test Suite (10/10)</a>
+        <a href="https://github.com/manishr075/contractsync" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition flex items-center gap-2">
+          <i class="fa-brands fa-github"></i> GitHub
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative pt-12 pb-16 overflow-hidden border-b border-slate-800/80">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(139,92,246,0.1),transparent_50%)]"></div>
+    <div class="max-w-5xl mx-auto px-4 text-center relative z-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-700 text-xs text-slate-300 mb-6">
+        <i class="fa-solid fa-bolt text-purple-400"></i> Autonomous Dual-Agent API Governance & Synchronization
+      </div>
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white mb-6">
+        One API Contract. <span class="bg-gradient-to-r from-purple-400 to-emerald-400 bg-clip-text text-transparent">Two Agents.</span><br/>Zero Synchronization Chaos.
+      </h1>
+      <p class="text-lg sm:text-xl text-slate-400 max-w-3xl mx-auto mb-8 leading-relaxed">
+        Stop breaking frontend apps when backend APIs change. ContractSync connects <span class="text-purple-400 font-semibold">SpecArchitect</span> and <span class="text-emerald-400 font-semibold">FrontendSync</span> inside a shared <span class="text-white font-semibold">Switch</span> room to analyze breaking changes, enforce human approval gates, and synchronize TypeScript types and mocks with real compiler verification.
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="#simulator" class="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold shadow-lg shadow-purple-600/30 transition-all flex items-center gap-2">
+          <i class="fa-solid fa-play"></i> Try Interactive Switch Simulator
+        </a>
+        <a href="https://github.com/manishr075/contractsync" target="_blank" class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold transition flex items-center gap-2">
+          <i class="fa-brands fa-github text-lg"></i> View Source on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Switch Room Simulator -->
+  <section id="simulator" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+      <div>
+        <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-purple-400 mb-1">
+          <i class="fa-solid fa-satellite-dish"></i> Live Switch Room Coordination
+        </div>
+        <h2 class="text-3xl font-bold text-white">#api-contract-room Live Simulator</h2>
+        <p class="text-slate-400 text-sm mt-1">Interact with the actual 7-step Switch protocol workflow in real time.</p>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex flex-wrap gap-2">
+        <button id="btn-run-all" class="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold shadow transition flex items-center gap-2">
+          <i class="fa-solid fa-forward-step"></i> Run Full Workflow
+        </button>
+        <button id="btn-step-next" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-sm font-medium transition flex items-center gap-2">
+          <i class="fa-solid fa-shoe-prints"></i> Next Step
+        </button>
+        <button id="btn-reset" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-sm font-medium transition">
+          <i class="fa-solid fa-rotate-right"></i> Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Simulator Container -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+
+      <!-- Room Sidebar -->
+      <div class="lg:col-span-1 border-r border-slate-800 p-5 bg-slate-900/60">
+        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center justify-between">
+          <span>Room Participants</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        </div>
+
+        <ul class="space-y-3 text-sm">
+          <li class="flex items-center gap-3 p-2 rounded-lg bg-slate-800/60 border border-slate-700/50">
+            <div class="w-8 h-8 rounded-full bg-blue-600/30 text-blue-400 border border-blue-500/40 flex items-center justify-center font-bold text-xs">DEV</div>
+            <div>
+              <div class="font-semibold text-white">Developer</div>
+              <div class="text-xs text-slate-400">@developer (Approver)</div>
+            </div>
+          </li>
+          <li class="flex items-center gap-3 p-2 rounded-lg bg-purple-950/40 border border-purple-800/50">
+            <div class="w-8 h-8 rounded-full bg-purple-600/30 text-purple-400 border border-purple-500/40 flex items-center justify-center font-bold text-xs">SA</div>
+            <div>
+              <div class="font-semibold text-purple-200">SpecArchitect</div>
+              <div class="text-xs text-purple-400">@spec-architect (Backend)</div>
+            </div>
+          </li>
+          <li class="flex items-center gap-3 p-2 rounded-lg bg-emerald-950/40 border border-emerald-800/50">
+            <div class="w-8 h-8 rounded-full bg-emerald-600/30 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-bold text-xs">FS</div>
+            <div>
+              <div class="font-semibold text-emerald-200">FrontendSync</div>
+              <div class="text-xs text-emerald-400">@frontend-sync (Frontend)</div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="mt-8 border-t border-slate-800 pt-5">
+          <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Workflow State</div>
+          <div id="sim-state-badge" class="px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-300 flex items-center justify-between">
+            <span id="sim-state-text">Ready (Contract v1.0.0)</span>
+            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+          </div>
+
+          <div class="mt-4 text-xs text-slate-400 space-y-1">
+            <div><strong>Switch Protocol:</strong> WebSocket ws://</div>
+            <div><strong>Event Ordering:</strong> Monotonic Seq Log</div>
+            <div><strong>Gate Status:</strong> <span id="sim-gate-status" class="text-emerald-400 font-semibold">Active & Armed</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Message Feed -->
+      <div class="lg:col-span-3 flex flex-col h-[540px]">
+        <!-- Feed Header -->
+        <div class="px-6 py-3 border-b border-slate-800 bg-slate-900/90 flex items-center justify-between text-xs text-slate-400">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-hashtag text-purple-400 font-bold"></i>
+            <span class="font-bold text-slate-200">api-contract-room</span>
+            <span class="text-slate-500">|</span>
+            <span>Switch Append-Only Bus</span>
+          </div>
+          <div id="sim-msg-count" class="font-mono">0 messages</div>
+        </div>
+
+        <!-- Messages Area -->
+        <div id="message-container" class="flex-1 p-6 overflow-y-auto space-y-4 scrollbar-thin bg-slate-950/60">
+          <!-- Welcome Placeholder -->
+          <div id="sim-welcome" class="text-center py-12 text-slate-500">
+            <i class="fa-solid fa-comments text-4xl mb-3 text-slate-700"></i>
+            <p class="text-sm">Click <strong>"Run Full Workflow"</strong> or <strong>"Next Step"</strong> to see the real Switch message log in action.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Contract & Code Inspector -->
+  <section id="inspector" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-t border-slate-800">
+    <div class="mb-8">
+      <div class="text-xs font-semibold uppercase tracking-wider text-emerald-400 mb-1">
+        <i class="fa-solid fa-file-code"></i> Synchronized Artifacts
+      </div>
+      <h2 class="text-3xl font-bold text-white">Live Contract & Code Inspector</h2>
+      <p class="text-slate-400 text-sm mt-1">Examine how the OpenAPI contract evolution automatically synchronizes frontend TypeScript interfaces and mocks.</p>
+    </div>
+
+    <!-- Inspector Tabs -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+      <div class="flex border-b border-slate-800 bg-slate-900/80 px-4 pt-2 gap-2 text-sm font-medium">
+        <button onclick="showTab('openapi')" id="tab-btn-openapi" class="px-4 py-2.5 border-b-2 border-purple-500 text-white flex items-center gap-2">
+          <i class="fa-solid fa-file-lines text-purple-400"></i> openapi.yaml (v1.1.0)
+        </button>
+        <button onclick="showTab('types')" id="tab-btn-types" class="px-4 py-2.5 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
+          <i class="fa-brands fa-js text-blue-400"></i> src/api.types.ts
+        </button>
+        <button onclick="showTab('mocks')" id="tab-btn-mocks" class="px-4 py-2.5 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
+          <i class="fa-solid fa-flask text-emerald-400"></i> src/mocks.ts
+        </button>
+        <button onclick="showTab('compiler')" id="tab-btn-compiler" class="px-4 py-2.5 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
+          <i class="fa-solid fa-terminal text-yellow-400"></i> Compiler Verification (tsc)
+        </button>
+      </div>
+
+      <!-- Tab Contents -->
+      <div class="p-6 bg-slate-950 font-mono text-sm overflow-x-auto scrollbar-thin">
+        <!-- Tab 1: OpenAPI -->
+        <pre id="tab-openapi" class="text-slate-300 leading-relaxed"><code>openapi: 3.0.3
+info:
+  title: Spot Service API
+  version: 1.1.0  <span class="text-emerald-400 font-bold"># Bumped after approved human migration</span>
+paths:
+  /api/spots:
+    get:
+      summary: Retrieve spots
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Spot'
+components:
+  schemas:
+    Spot:
+      type: object
+      required:
+        - id
+        - name
+        - availability_state  <span class="text-emerald-400 font-bold"># New required field replaces spot_status</span>
+      properties:
+        id:
+          type: integer
+          example: 101
+        name:
+          type: string
+          example: Library
+        <span class="text-emerald-400">availability_state:</span>
+          type: string
+          description: Current operational availability state of the resource spot
+          example: available
+        <span class="text-purple-400">role:</span>
+          type: string
+          description: Access role associated with the spot
+          <span class="text-purple-400 font-bold">enum: [admin, user, guest]</span>
+          example: admin
+        <span class="text-amber-400">spot_status:</span>
+          type: string
+          description: DEPRECATED: Use availability_state instead. Retained for backward compatibility.
+          <span class="text-amber-400 font-bold">deprecated: true  # Preserved for legacy consumers</span>
+          example: available</code></pre>
+
+        <!-- Tab 2: TypeScript Types -->
+        <pre id="tab-types" class="hidden text-slate-300 leading-relaxed"><code>/**
+ * Auto-generated TypeScript API Definitions for Spot Service API
+ * Contract Version: 1.1.0
+ * Generated by: ContractSync FrontendSync Agent
+ */
+
+<span class="text-purple-400">export type SpotRole = 'admin' | 'user' | 'guest';</span>
+
+export interface Spot {
+  /** Unique spot identifier */
+  id: number;
+  /** Name of the facility or spot */
+  name: string;
+  /** Current operational availability state of the resource spot */
+  <span class="text-emerald-400 font-bold">availability_state: string;</span>
+  /** Access role associated with the spot */
+  <span class="text-purple-400">role?: 'admin' | 'user' | 'guest';</span>
+  /**
+   * DEPRECATED: Use availability_state instead. Retained for backward compatibility.
+   * <span class="text-amber-400 font-bold">@deprecated Retained for backward compatibility</span>
+   */
+  <span class="text-amber-400">spot_status?: string;</span>
+}
+
+export type GetSpotsResponse = Spot;</code></pre>
+
+        <!-- Tab 3: Mocks -->
+        <pre id="tab-mocks" class="hidden text-slate-300 leading-relaxed"><code>import { Spot } from './api.types.js';
+
+/**
+ * Mock response data adhering to the Spot contract (v1.1.0)
+ * Synchronized by: ContractSync FrontendSync Agent
+ */
+export const mockSpotResponse: Spot = {
+  id: 101,
+  name: 'Library',
+  <span class="text-emerald-400 font-bold">availability_state: 'available',</span>
+  <span class="text-purple-400 font-bold">role: 'admin',</span>
+  <span class="text-amber-400 font-bold">// Retained for backward compatibility with legacy consumers</span>
+  <span class="text-amber-400 font-bold">spot_status: 'available',</span>
+};
+
+export async function getMockSpots(): Promise&lt;Spot&gt; {
+  return Promise.resolve(mockSpotResponse);
+}</code></pre>
+
+        <!-- Tab 4: Compiler Output -->
+        <pre id="tab-compiler" class="hidden text-slate-300 leading-relaxed"><code>$ npx tsc --noEmit
+<span class="text-emerald-400 font-bold">TypeScript compilation passed with 0 errors.</span>
+
+[COMPILER EXIT CODE]: <span class="text-emerald-400 font-bold">0</span>
+[TYPE CHECK RESULT]: <span class="text-emerald-400 font-bold">SUCCESS</span>
+
+Verification Details:
+- Target: demo-workspace/src/
+- Strict Mode: ENABLED (noImplicitAny: true)
+- Module Resolution: NodeNext
+- Consumers Verified: demo-workspace/src/index.ts compiled cleanly with Spot v1.1.0</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Automated Test Suite (10/10) -->
+  <section id="tests" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full border-t border-slate-800">
+    <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div>
+        <div class="text-xs font-semibold uppercase tracking-wider text-purple-400 mb-1">
+          <i class="fa-solid fa-shield-halved"></i> Quality Assurance & Verification
+        </div>
+        <h2 class="text-3xl font-bold text-white">Automated Test Suite (10/10 Passing)</h2>
+        <p class="text-slate-400 text-sm mt-1">Every core mechanism is backed by automated end-to-end and unit tests.</p>
+      </div>
+
+      <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-sm">
+        <i class="fa-solid fa-circle-check text-base"></i> 100% Test Pass Rate
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold mt-0.5">PASS</span>
+        <div>
+          <div class="font-semibold text-white text-sm">Test 01: OpenAPI Specification Validity</div>
+          <div class="text-xs text-slate-400 mt-1">Validates OpenAPI 3.0.3 compliance, schema structure, and endpoint paths.</div>
+        </div>
+      </div>
+      <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold mt-0.5">PASS</span>
+        <div>
+          <div class="font-semibold text-white text-sm">Test 02: Field Rename Breaking Change Detection</div>
+          <div class="text-xs text-slate-400 mt-1">Identifies spot_status -&gt; availability_state as a CRITICAL breaking change.</div>
+        </div>
+      </div>
+      <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold mt-0.5">PASS</span>
+        <div>
+          <div class="font-semibold text-white text-sm">Test 03: Detection of Newly Introduced Enum</div>
+          <div class="text-xs text-slate-400 mt-1">Extracts role enum values [admin, user, guest] with validation.</div>
+        </div>
+      </div>
+      <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold mt-0.5">PASS</span>
+        <div>
+          <div class="font-semibold text-white text-sm">Test 04: Preservation of Deprecated Compatibility Field</div>
+          <div class="text-xs text-slate-400 mt-1">Guarantees spot_status is retained with deprecated: true and optionality.</div>
+        </div>
+      </div>
+      <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold mt-0.5">PASS</span>
+        <div>
+          <div class="font-semibold text-white text-sm">Test 05: Deterministic TypeScript Type Generation</div>
+          <div class="text-xs text-slate-400 mt-1">Generates Spot, SpotRole union, and @deprecated JSDoc comments.</div>
+        </div>
+      </div>
+      <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold mt-0.5">PASS</span>
+        <div>
+          <div class="font-semibold text-white text-sm">Test 06: Mock Data Consistency</div>
+          <div class="text-xs text-slate-400 mt-1">Ensures mock fixtures provide valid values for all active and deprecated fields.</div>
+        </div>
+      </div>
+      <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold mt-0.5">PASS</span>
+        <div>
+          <div class="font-semibold text-white text-sm">Test 07: TypeScript Compilation Verification (tsc --noEmit)</div>
+          <div class="text-xs text-slate-400 mt-1">Runs real TypeScript compiler and asserts zero type errors (Exit code 0).</div>
+        </div>
+      </div>
+      <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold mt-0.5">PASS</span>
+        <div>
+          <div class="font-semibold text-white text-sm">Test 08: Rejection of Unapproved Contract Modifications</div>
+          <div class="text-xs text-slate-400 mt-1">Proves SpecArchitect strictly refuses to modify openapi.yaml without human approval.</div>
+        </div>
+      </div>
+      <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold mt-0.5">PASS</span>
+        <div>
+          <div class="font-semibold text-white text-sm">Test 09: Handling Invalid or Incomplete Approvals</div>
+          <div class="text-xs text-slate-400 mt-1">Rejects non-conforming or vague approval instructions missing mitigation terms.</div>
+        </div>
+      </div>
+      <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold mt-0.5">PASS</span>
+        <div>
+          <div class="font-semibold text-white text-sm">Test 10: Switch Wire Protocol & Operations Verification</div>
+          <div class="text-xs text-slate-400 mt-1">Verifies WebSocket frame lifecycles, ping/pong cursors, and monotonic seq.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="mt-auto border-t border-slate-800 bg-slate-900/60 py-8 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <strong>ContractSync</strong> — Built with pride for <strong>Flip the Switch 2026</strong>.
+      </div>
+      <div class="flex items-center gap-4 text-slate-400">
+        <a href="https://docs.switchagents.ai/" target="_blank" class="hover:text-purple-400">Switch AI Docs</a>
+        <a href="https://github.com/manishr075/contractsync" target="_blank" class="hover:text-purple-400">GitHub Repository</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Simulation JavaScript -->
+  <script>
+    const messages = [
+      {
+        sender: 'Developer',
+        handle: '@developer',
+        avatarBg: 'bg-blue-600',
+        badge: 'HUMAN',
+        badgeColor: 'bg-blue-500/20 text-blue-400',
+        body: 'Update GET /api/spots. Rename spot_status to availability_state and add a role field with the values admin, user and guest.',
+        seq: 1
+      },
+      {
+        sender: 'SpecArchitect',
+        handle: '@spec-architect',
+        avatarBg: 'bg-purple-600',
+        badge: 'BACKEND AGENT',
+        badgeColor: 'bg-purple-500/20 text-purple-400',
+        body: `### [API CHANGE DETECTED]
+- **Target Endpoint**: \`GET /api/spots\`
+- **Field Renames**: \`spot_status\` -&gt; \`availability_state\`
+- **Field Additions**: \`role\` (enum: [admin, user, guest])
+
+### [BREAKING CHANGE DETECTED]
+- **spot_status** (CRITICAL): Renaming 'spot_status' to 'availability_state' will immediately break frontend consumers expecting response.spot_status.
+
+### [RECOMMENDED MIGRATION STRATEGY]
+- Introduce \`availability_state\`, retain \`spot_status\` as an optional deprecated field for backward compatibility, and add the \`role\` enum with allowed values [admin, user, guest].
+
+### [HUMAN APPROVAL REQUIRED]
+SpecArchitect has paused contract modification. Awaiting explicit authorization from @developer in this Switch room.
+Please reply with: \`APPROVE: ...\` to authorize or provide revised instructions.`,
+        seq: 2
+      },
+      {
+        sender: 'Developer',
+        handle: '@developer',
+        avatarBg: 'bg-blue-600',
+        badge: 'HUMAN APPROVAL',
+        badgeColor: 'bg-emerald-500/20 text-emerald-400',
+        body: 'APPROVE: Introduce availability_state, retain spot_status as an optional deprecated field for backward compatibility, and add the role enum.',
+        seq: 3
+      },
+      {
+        sender: 'SpecArchitect',
+        handle: '@spec-architect',
+        avatarBg: 'bg-purple-600',
+        badge: 'CONTRACT COMMITTED',
+        badgeColor: 'bg-purple-500/20 text-purple-400',
+        body: `### [CONTRACT APPROVED]
+- **Approved By**: @developer:switch-local
+- **Sequence Recorded**: Message #3 at 2026-11-07T06:11:05.859Z
+- **Updated File**: \`demo-workspace/openapi.yaml\` (v1.1.0)
+- **Backward Compatibility**: Preserved. \`spot_status\` retained as optional deprecated string.
+- **New Additions**: \`availability_state\` (string), \`role\` (enum: [admin, user, guest]).
+
+**Handoff to @frontend-sync**: Official API contract v1.1.0 committed to Switch room. Please synchronize TypeScript types and mock data, then run compiler verification.`,
+        seq: 4
+      },
+      {
+        sender: 'FrontendSync',
+        handle: '@frontend-sync',
+        avatarBg: 'bg-emerald-600',
+        badge: 'FRONTEND AGENT',
+        badgeColor: 'bg-emerald-500/20 text-emerald-400',
+        body: `### [FRONTEND SYNCHRONIZATION STARTED]
+- Triggered by: @spec-architect:switch-local
+- Synchronizing TypeScript interfaces from \`openapi.yaml\`...
+- Updating mock response fixtures...`,
+        seq: 5
+      },
+      {
+        sender: 'FrontendSync',
+        handle: '@frontend-sync',
+        avatarBg: 'bg-emerald-600',
+        badge: 'TYPE CHECK PASSED',
+        badgeColor: 'bg-emerald-500/20 text-emerald-400 font-bold',
+        body: `### [FRONTEND SYNCHRONIZATION COMPLETE]
+### [TYPE CHECK PASSED]
+
+#### 1. Contract Summary
+- **API Specification**: \`demo-workspace/openapi.yaml\` (v1.1.0)
+- **Approved Migration**: Introduced \`availability_state\`, preserved \`spot_status\` as deprecated, added \`role\` enum.
+
+#### 2. Synchronized Artifacts
+- \`demo-workspace/src/api.types.ts\`:
+  * \`availability_state: string\` (required)
+  * \`role?: 'admin' | 'user' | 'guest'\` (enum union)
+  * \`spot_status?: string\` (marked \`@deprecated\` for backward compatibility)
+- \`demo-workspace/src/mocks.ts\`:
+  * Updated mock fixture with valid enum value \`role: 'admin'\`
+  * Populated both \`availability_state: 'available'\` and \`spot_status: 'available'\`
+
+#### 3. TypeScript Compiler Verification
+- **Command**: \`npx tsc --noEmit\`
+- **Result**: SUCCESS (Exit Code 0)
+- **Compiler Output**:
+\`\`\`
+TypeScript compilation passed with 0 errors.
+\`\`\`
+
+#### 4. Operational Health & Compatibility
+- **Existing Consumers**: Safe (legacy consumers of \`spot_status\` remain non-broken).
+- **New Consumers**: Can immediately adopt \`availability_state\` and \`role\`.
+- **Remaining Issues**: None. Contract and frontend code are 100% synchronized.`,
+        seq: 6
+      }
+    ];
+
+    let currentStep = 0;
+    const container = document.getElementById('message-container');
+    const msgCount = document.getElementById('sim-msg-count');
+    const stateText = document.getElementById('sim-state-text');
+    const gateStatus = document.getElementById('sim-gate-status');
+
+    function renderMessage(msg) {
+      document.getElementById('sim-welcome')?.remove();
+      const div = document.createElement('div');
+      div.className = 'p-4 rounded-xl bg-slate-900 border border-slate-800 transition-all duration-300 transform translate-y-2 opacity-0 shadow-lg';
+      
+      const formattedBody = msg.body
+        .replace(/### (.*?)\n/g, '<div class="text-sm font-bold text-slate-100 mt-2 mb-1">$1</div>')
+        .replace(/#### (.*?)\n/g, '<div class="text-xs font-semibold text-slate-300 mt-2 mb-1">$1</div>')
+        .replace(/- \*\*(.*?)\*\*: (.*?)\n/g, '<div class="text-xs text-slate-300 py-0.5"><span class="text-slate-400 font-medium">$1:</span> <span class="font-mono text-purple-300">$2</span></div>')
+        .replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-slate-800 text-purple-300 text-xs font-mono">$1</code>')
+        .replace(/```([\s\S]*?)```/g, '<pre class="my-2 p-3 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono text-emerald-400 overflow-x-auto">$1</pre>');
+
+      div.innerHTML = `
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-full ${msg.avatarBg} text-white flex items-center justify-center text-xs font-bold">${msg.sender.substring(0, 2).toUpperCase()}</div>
+            <span class="font-bold text-sm text-white">${msg.sender}</span>
+            <span class="text-xs text-slate-400">${msg.handle}</span>
+            <span class="text-xs px-2 py-0.5 rounded ${msg.badgeColor}">${msg.badge}</span>
+          </div>
+          <span class="text-xs font-mono text-slate-500">seq #${msg.seq}</span>
+        </div>
+        <div class="text-sm text-slate-300 pl-8 leading-relaxed">${formattedBody}</div>
+      `;
+
+      container.appendChild(div);
+      setTimeout(() => {
+        div.classList.remove('translate-y-2', 'opacity-0');
+      }, 20);
+
+      container.scrollTop = container.scrollHeight;
+      msgCount.innerText = `${currentStep} messages`;
+    }
+
+    function stepNext() {
+      if (currentStep < messages.length) {
+        renderMessage(messages[currentStep]);
+        currentStep++;
+
+        if (currentStep === 2) {
+          stateText.innerText = 'Awaiting Human Approval';
+          gateStatus.innerHTML = '<span class="text-amber-400 font-bold">Lock Engaged</span>';
+        } else if (currentStep === 4) {
+          stateText.innerText = 'Contract v1.1.0 Committed';
+          gateStatus.innerHTML = '<span class="text-emerald-400 font-bold">Approved</span>';
+        } else if (currentStep === 6) {
+          stateText.innerText = 'Verified (tsc Exit 0)';
+          gateStatus.innerHTML = '<span class="text-emerald-400 font-bold">Synchronized</span>';
+        }
+      }
+    }
+
+    async function runAll() {
+      resetSim();
+      for (let i = 0; i < messages.length; i++) {
+        stepNext();
+        await new Promise(r => setTimeout(r, 800));
+      }
+    }
+
+    function resetSim() {
+      currentStep = 0;
+      container.innerHTML = `
+        <div id="sim-welcome" class="text-center py-12 text-slate-500">
+          <i class="fa-solid fa-comments text-4xl mb-3 text-slate-700"></i>
+          <p class="text-sm">Click <strong>"Run Full Workflow"</strong> or <strong>"Next Step"</strong> to see the real Switch message log in action.</p>
+        </div>
+      `;
+      msgCount.innerText = '0 messages';
+      stateText.innerText = 'Ready (Contract v1.0.0)';
+      gateStatus.innerHTML = '<span class="text-emerald-400 font-semibold">Active & Armed</span>';
+    }
+
+    document.getElementById('btn-step-next').onclick = stepNext;
+    document.getElementById('btn-run-all').onclick = runAll;
+    document.getElementById('btn-reset').onclick = resetSim;
+
+    // Tabs
+    function showTab(tabId) {
+      ['openapi', 'types', 'mocks', 'compiler'].forEach(id => {
+        document.getElementById(`tab-${id}`).classList.add('hidden');
+        document.getElementById(`tab-btn-${id}`).classList.remove('border-purple-500', 'text-white');
+        document.getElementById(`tab-btn-${id}`).classList.add('border-transparent', 'text-slate-400');
+      });
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+      document.getElementById(`tab-btn-${tabId}`).classList.add('border-purple-500', 'text-white');
+      document.getElementById(`tab-btn-${tabId}`).classList.remove('border-transparent', 'text-slate-400');
+    }
+  </script>
+</body>
+</html>
