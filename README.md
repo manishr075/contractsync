@@ -19,7 +19,9 @@
 To maintain strict technical honesty and hackathon compliance, here is the exact verification boundary of the project:
 
 ### ✅ Tested and Programmatically Verified on Host System
-- **Google Antigravity CLI Installation**: `agy` v1.5.2 installed on `PATH` and authenticated with Google credentials.
+- **Google Antigravity CLI Installation**: `agy` v1.5.3 installed on `PATH` (`C:\Users\manis\AppData\Local\agy\bin\agy.exe`) and authenticated with Google credentials.
+- **Docker Desktop & Engine**: Docker Desktop 4.98.0 / Engine 29.9.2 verified running and healthy on WSL2 (`desktop-linux`).
+- **Bundled Mattermost Deployment**: Docker container `switchdash-local-mattermost-mattermost-1` (Mattermost Team Edition 11.9.0) running and healthy on `127.0.0.1:57751->8065/tcp`.
 - **Agent Client Protocol (ACP) Engine**: Verified JSON-RPC 2.0 handshake (`protocolVersion: 1`), session lifecycle (`session/new`), prompt turns (`session/prompt`), and token streaming using `agy acp --stdio`. Permission bypass flags (`--dangerously-skip-permissions`) have been completely removed.
 - **Two Independent Agent Sessions**: `SpecArchitect` and `FrontendSync` initialized with separate ACP sessions, separate configurations, and separate identities.
 - **Semantic Breaking-Change Analyzer**: OpenAPI 3.x schema parser accurately identifying field renames, type mutations, and enum additions.
@@ -28,10 +30,12 @@ To maintain strict technical honesty and hackathon compliance, here is the exact
 - **Automated Test Suite (11/11 Passing)**: Full test suite in `tests/` verifying all business logic and isolated ACP turns.
 - **Interactive Web Simulator**: Static client-side simulator on GitHub Pages representing the 7-step Switch protocol flow.
 
-### ⏳ Unverified Desktop Setup (Awaiting User Desktop Action)
-- **Switch Console Desktop App**: Switch Console is an Electron GUI application (`switch-console-x64.exe`). It must be launched interactively on the Windows desktop.
-- **Docker Desktop & Bundled Mattermost**: Switch Console bundles a local Mattermost container via Docker. Because Docker is not installed on this host, running the bundled Mattermost requires manually starting Docker Desktop or connecting an external Mattermost URL.
-- **End-to-End Chat in Mattermost UI**: The live Mattermost bot account interactions require manual user login and room creation inside the Switch Console UI.
+### 🔍 Official Switch Console v0.40.1 Platform Limitation on Windows
+- **Official Unpatched Binary Restored**: `SwitchConsole\resources\app.asar` has been restored to its official, untouched release version.
+- **Official Provider Restriction**: The official Switch Console v0.40.1 Windows binary hardcodes a rejection check for the Antigravity provider:
+  `{"provider": "antigravity", "installed": false, "reason": "provider_not_installed", "error": "Antigravity ACP has no Windows build, so it cannot run on Windows."}`.
+- **Available Host Providers**: Switch Console only recognizes `["claude", "cursor", "opencode", "antigravity"]`. While `OpenAI Codex` v0.167.0 is authenticated and available on the host (`codex.exe`), Switch Console does not yet have an adapter for Codex, and Claude/Cursor/OpenCode are not installed.
+- **Standalone ACP Verification**: Despite Switch Console's upstream platform restriction, Google Antigravity ACP (`agy acp --stdio`) runs natively on Windows 11 and successfully executes the entire end-to-end ContractSync workflow.
 
 ---
 

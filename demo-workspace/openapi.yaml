@@ -1,20 +1,16 @@
 openapi: 3.0.3
 info:
   title: Spot Service API
-  version: 1.0.0
-  description: API for managing physical spaces and resource spots in the campus facility.
+  version: 1.1.0
 paths:
   /api/spots:
     get:
-      summary: Retrieve spots
-      description: Returns a list or single spot with status information.
       responses:
-        '200':
-          description: Successful spot lookup
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Spot'
+                $ref: "#/components/schemas/Spot"
 components:
   schemas:
     Spot:
@@ -22,17 +18,27 @@ components:
       required:
         - id
         - name
-        - spot_status
+        - availability_state
       properties:
         id:
           type: integer
-          description: Unique spot identifier
-          example: 101
         name:
           type: string
-          description: Name of the facility or spot
-          example: Library
         spot_status:
           type: string
-          description: Current operational status of the spot
+          description: "DEPRECATED: Use availability_state instead. Retained for backward
+            compatibility."
+          deprecated: true
           example: available
+        availability_state:
+          type: string
+          description: Current operational availability state of the resource spot
+          example: available
+        role:
+          type: string
+          description: Access role associated with the spot
+          enum:
+            - admin
+            - user
+            - guest
+          example: admin
