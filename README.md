@@ -4,10 +4,13 @@
 
 [![Flip the Switch 2026](https://img.shields.io/badge/Hackathon-Flip%20the%20Switch%202026-blue)](https://www.wemakedevs.org/hackathons/switch)
 [![Track](https://img.shields.io/badge/Track-Best%20Business%20Workflow-green)](https://www.wemakedevs.org/hackathons/switch)
+[![Live Demo & Simulator](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-purple)](https://manishr075.github.io/contractsync/)
+[![Deploy Status](https://github.com/manishr075/contractsync/actions/workflows/deploy.yml/badge.svg)](https://github.com/manishr075/contractsync/actions/workflows/deploy.yml)
+[![Tests](https://img.shields.io/badge/Tests-10%2F10%20Passing-brightgreen)](tests/run-all-tests.ts)
 [![Switch Compatible](https://img.shields.io/badge/Switch-v0.31-purple)](https://docs.switchagents.ai/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9%20%7C%20Strict-blue)](https://www.typescriptlang.org/)
-[![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0.3-orange)](https://www.openapis.org/)
-[![Tests](https://img.shields.io/badge/Tests-10%2F10%20Passing-brightgreen)](tests/run-all-tests.ts)
+
+**Live GitHub Pages Showcase & Interactive Simulator:** [https://manishr075.github.io/contractsync/](https://manishr075.github.io/contractsync/)
 
 ContractSync is an autonomous, collaborative API contract coordination and synchronization system built for the **Flip the Switch 2026 Hackathon (Best Business Workflow Track)**.
 
